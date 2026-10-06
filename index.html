@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DOOM — Latveria XatSpace</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="space">
+
+<section id="intro" class="screen">
+<div class="intro-reveal" aria-hidden="true"></div>
+<div class="entry-mask" aria-hidden="true"></div>
+<button class="hotspot enter" aria-label="Press">PRESS</button>
+</section>
+
+<section id="lobby" class="screen">
+
+<button class="hotspot home" data-panel="inicio"></button>
+<button class="hotspot profile" data-panel="perfil"></button>
+<button class="hotspot heroes" data-panel="heroes"></button>
+<button class="hotspot collection" data-panel="coleccion"></button>
+<button class="hotspot events" data-panel="eventos"></button>
+<button class="hotspot friends" data-panel="amigos"></button>
+<button class="hotspot music" data-panel="musica"></button>
+<button class="hotspot avt" data-panel="avt"></button>
+<button class="hotspot start" data-toast="PARTIDA INICIADA"></button>
+
+<div id="inicio" class="panel">
+<button class="close">×</button><h2>INICIO</h2><p>Panel principal de Latveria.</p>
+<div class="list"><div class="item"><strong>DOOM</strong> — Lv. 100</div><div class="item">Estado: <strong>ONLINE</strong></div></div>
+</div>
+
+<div id="perfil" class="panel">
+<button class="close">×</button><h2>PERFIL</h2><p>Perfil del soberano de Latveria.</p>
+<div class="list"><div class="item">Nombre: <strong>DOOM</strong></div><div class="item">Rango: <strong>Lv. 100</strong></div></div>
+</div>
+
+<div id="heroes" class="panel">
+<button class="close">×</button><h2>HÉROES</h2><p>Selección de héroes.</p>
+<div class="list"><div class="item"><strong>DOOM</strong> — seleccionado</div><div class="item">Espacio disponible para futuros personajes.</div></div>
+</div>
+
+<div id="coleccion" class="panel">
+<button class="close">×</button><h2>COLECCIÓN</h2><p>Cosméticos, insignias y elementos del Space.</p>
+</div>
+
+<div id="eventos" class="panel">
+<button class="close">×</button><h2>EVENTOS</h2><p>Eventos de Latveria.</p>
+</div>
+
+<div id="amigos" class="panel">
+<button class="close">×</button><h2>AMIGOS</h2>
+<div class="list">
+<div class="item"><strong>Lugo</strong> — no molestar · gymrat, training</div>
+<div class="item"><strong>Estela</strong> — no molestar · working</div>
+<div class="item"><strong>Mar</strong> — no molestar · bingueando</div>
+<div class="item"><strong>Gabi</strong> — no molestar · playing with me</div>
+</div>
+</div>
+
+<div id="musica" class="panel">
+<button class="close">×</button><h2>MÚSICA</h2><p>Reproductor preparado para conectar la canción que quieras usar.</p>
+<div class="list"><div class="item"><strong>FEID — Aguante</strong></div></div>
+</div>
+
+<div id="avt" class="panel">
+<button class="close">×</button><h2>AVT CONDITION</h2><p>Estado del multiverso: <strong>estable</strong>.</p>
+</div>
+
+<div id="toast" aria-live="polite"></div>
+</section>
+</div>
+
+<div id="heroesGallery" aria-hidden="true">
+  <div class="heroes-frame">
+    <button class="heroes-close" type="button" aria-label="Cerrar">×</button>
+  </div>
+</div>
+
+    <script src="script.js"></script>
+</body>
+</html>
