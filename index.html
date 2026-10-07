@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marvel Rivals - PS5 Lobby</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Rajdhani:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="h-screen w-screen relative overflow-hidden flex flex-col justify-between">
+
+    <!-- PANTALLA DE INICIO: insertada sin modificar el lobby existente -->
+    <section id="intro-screen" class="intro-screen" aria-label="Pantalla de inicio">
+        <div class="intro-vignette"></div>
+        <div class="intro-scanlines"></div>
+        <div class="intro-content">
+            <div id="intro-doom" class="intro-doom" title="DOOM">
+                <img class="intro-base" src="https://u.cubeupload.com/Eradicater/ca7b6e1cff7e339cb559.jpg" alt="Doom">
+            </div>
+            <button id="intro-start" class="intro-start" type="button">START</button>
+            <div class="intro-hint">LATVERIA // ACCESS</div>
+        </div>
+    </section>
+
+
+    <!-- MATTE GRAY BACKGROUND -->
+    <div class="absolute inset-0 z-0 bg-[#a8aaab]">
+        <div class="absolute inset-0 bg-gradient-to-b from-[#bfc1c2] via-[#a5a7a8] to-[#858789] pointer-events-none"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(245,245,245,0.18)_0%,rgba(190,192,193,0.04)_48%,rgba(30,32,34,0.42)_100%)] pointer-events-none"></div>
+        <div class="absolute inset-0 shadow-[inset_0_0_140px_rgba(20,22,24,0.48)] pointer-events-none"></div>
+    </div>
+
+    <!-- Particles Container -->
+    <div id="particle-container" class="absolute inset-0 z-0 pointer-events-none overflow-hidden"></div>
+
+    <!-- CENTRAL SELECTED CHARACTER -->
+    <div class="doom-character absolute inset-0 z-[8] pointer-events-none flex items-center justify-center">
+        
+        <div class="doom-glitch-wrap">
+            <img
+            src="assets/doom.png"
+            alt="Doom"
+            class="doom-character-img"
+        >
+            <img
+            src="assets/doom.png"
+            alt=""
+            class="doom-character-img doom-glitch-layer glitch-green"
+        >
+            <img
+            src="assets/doom.png"
+            alt=""
+            class="doom-character-img doom-glitch-layer glitch-white"
+        >
+        </div>
+    </div>
+
+    <!-- TOP NAVIGATION BAR (PS5 STYLE) -->
+    <header class="relative z-30 w-full px-6 md:px-12 py-5 flex items-center justify-between bg-gradient-to-b from-black/90 via-black/40 to-transparent">
+        
+        <!-- Left Menu & Marvel Rivals Logo -->
+        <div class="flex items-center space-x-6">
+            <button onclick="toggleGeneralMenu()" class="flex items-center space-x-2 bg-zinc-900/90 hover:bg-emerald-600/30 text-zinc-300 hover:text-white px-4 py-2 rounded-md border border-zinc-700/80 hover:border-emerald-500 transition-all clip-slanted">
+                <i class="fa-solid fa-bars text-emerald-400"></i>
+                <span class="font-teko text-2xl tracking-wider uppercase leading-none">MENÚ</span>
+            </button>
+
+        </div>
+
+        <!-- Navigation Tabs -->
+        <nav class="mobile-nav flex items-center space-x-2 bg-black/60 backdrop-blur-md p-1.5 rounded-xl border border-emerald-500/30">
+            <button onclick="setActiveTab(this)" class="nav-tab active font-teko text-2xl tracking-wider px-6 py-1 rounded-lg text-black bg-emerald-400 font-bold transition-all clip-slanted">INICIO</button>
+            <button onclick="setActiveTab(this); toggleHeroesPanel()" class="nav-tab font-teko text-2xl tracking-wider px-6 py-1 rounded-lg text-zinc-300 hover:text-white hover:bg-emerald-950/50 transition-all clip-slanted">HÉROES</button>
+            <button onclick="setActiveTab(this); toggleSquadPanel()" class="nav-tab font-teko text-2xl tracking-wider px-6 py-1 rounded-lg text-zinc-300 hover:text-white hover:bg-emerald-950/50 transition-all clip-slanted">SOCIAL</button>
+        </nav>
+
+        <!-- Right Side Player Info & Currencies -->
+        <div class="flex items-center space-x-4">
+            <!-- Currencies -->
+            <div class="hidden sm:flex items-center space-x-3 bg-zinc-950/90 border border-emerald-500/40 px-3.5 py-1.5 rounded-lg shadow-lg">
+                <div class="flex items-center space-x-2 border-r border-zinc-800 pr-3.5">
+                    <i class="fa-solid fa-coins text-amber-400 text-sm"></i>
+                    <span class="font-teko text-2xl font-bold text-amber-300">18,250</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-star text-amber-400 text-sm"></i>
+                    <span class="font-teko text-2xl font-bold text-amber-300">342</span>
+                </div>
+            </div>
+
+            <!-- Profile Badge / Squad Toggle Button -->
+            <div class="relative">
+            <button onclick="toggleFeidHologram(event)" class="flex items-center space-x-3 bg-gradient-to-r from-zinc-950 via-emerald-950/80 to-zinc-950 hover:from-emerald-900 hover:to-zinc-900 px-4 py-1.5 rounded-lg border border-emerald-500/60 transition-all group shadow-xl">
+                <div class="w-9 h-9 rounded bg-emerald-500 text-black font-extrabold flex items-center justify-center text-lg clip-avatar">
+                    D
+                </div>
+                <div class="text-left hidden sm:block">
+                    <div class="font-teko text-xl leading-none font-bold text-white group-hover:text-emerald-300">FEID</div>
+                    <div class="text-[10px] text-emerald-400 font-extrabold uppercase tracking-widest">NIVEL 61 • INMORTAL</div>
+                </div>
+                <i class="fa-solid fa-users text-emerald-400 text-base ml-1"></i>
+            </button>
+            <div id="feid-hologram" class="feid-holo-wrap" aria-hidden="true">
+                <div class="feid-holo">OFFLINE OR DEATH</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN INTERACTIVE LOBBY CONTENT -->
+    <main class="relative z-20 flex-1 flex flex-col justify-between px-6 md:px-12 py-6 pointer-events-none">
+        
+        <!-- Hero Character Info Card -->
+        <div class="pointer-events-auto max-w-lg mt-2">
+            <div class="inline-flex items-center space-x-2 bg-emerald-950/90 border border-emerald-500/70 px-3.5 py-1 rounded-md text-emerald-400 font-bold text-xs tracking-widest mb-3 backdrop-blur-md shadow-lg">
+                <i class="fa-solid fa-crown text-amber-400"></i>
+                <span>FEID (16699)</span>
+            </div>
+            <div class="flex items-end gap-3">
+                <h1 class="font-teko text-7xl md:text-8xl font-extrabold tracking-wider leading-none text-white drop-shadow-2xl glow-text">
+                    DOOM
+                </h1>
+                <a href="https://xat.me/Estela" onclick="showBffPreview(event)" title="Bff — Estela" class="bff-float flex flex-col items-center justify-end text-emerald-400 hover:text-emerald-300 transition-colors">
+                    <span class="flex items-center gap-1 leading-none">
+                        <span class="relative flex items-center justify-center w-5 h-4 rounded-md border border-emerald-400/80 bg-emerald-950/70 shadow-[0_0_8px_rgba(52,211,153,0.45)]">
+                            <i class="fa-solid fa-comment-dots text-[9px]"></i>
+                            <span class="absolute -right-2 -top-2 flex items-center justify-center w-4 h-4 rounded-full bg-red-600 text-white text-[12px] font-black leading-none shadow-[0_0_8px_rgba(239,68,68,0.8)]">+</span>
+                        </span>
+                    </span>
+                    <span class="font-teko text-[10px] tracking-wider text-zinc-300 mt-0.5">Bff</span>
+                </a>
+            </div>
+            <p class="text-zinc-200 text-[8px] mt-1 bg-black/60 p-1 rounded-md border-l border-emerald-500 backdrop-blur-md shadow-lg w-fit max-w-xs leading-none">
+                Sobre esta roca, edificaré mi imperio.
+            </p>
+        </div>
+
+        <!-- Central Matchmaking Action Bar -->
+        <div class="pointer-events-auto w-full flex flex-col items-center justify-center mb-2">
+            <div class="flex items-center space-x-3 mb-3">
+                <span class="text-xs tracking-widest font-bold text-zinc-300 uppercase bg-black/80 px-4 py-1.5 rounded-md border border-zinc-700/80 backdrop-blur-md">
+                    <i class="fa-solid fa-shield-halved text-emerald-400 mr-1.5"></i>MODO: RUINA Y DOLOR
+                </span>
+                <span class="text-xs tracking-widest font-bold text-emerald-400 uppercase bg-emerald-950/90 px-4 py-1.5 rounded-md border border-emerald-500/50 backdrop-blur-md">
+                    <i class="fa-solid fa-wifi mr-1.5"></i>PING: 24 ms
+                </span>
+            </div>
+
+            <!-- Play Button -->
+            <button onclick="startMatchmaking()" id="play-btn" class="group relative w-80 md:w-96 h-16 bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 hover:from-emerald-400 hover:to-teal-300 text-black font-extrabold text-3xl tracking-widest clip-btn shadow-2xl glow-box transition-all duration-300 transform hover:scale-105 active:scale-95 flex items-center justify-center">
+                <span id="play-btn-text" class="font-teko italic group-hover:tracking-widest transition-all">לחפש</span>
+                <i id="play-btn-icon" class="fa-solid fa-play ml-3 text-2xl group-hover:translate-x-1.5 transition-transform"></i>
+            </button>
+        </div>
+    </main>
+
+    <!-- BOTTOM FOOTER TOGGLES -->
+    <!-- MINI CONTROLS - RIGHT SIDE -->
+    <footer class="relative z-30 w-full px-6 md:px-10 pb-8 flex justify-end pointer-events-none">
+        <div class="flex flex-col gap-2 items-end pointer-events-auto">
+            <button onclick="toggleChat()" title="Chat de amigos"
+                class="flex items-center gap-1.5 bg-zinc-950/90 hover:bg-emerald-950/90 text-white px-3 py-1.5 rounded-md border border-emerald-500/50 hover:border-emerald-400 transition-all clip-slanted shadow-xl">
+                <i class="fa-solid fa-comments text-emerald-400 text-xs"></i>
+                <span class="font-teko text-sm tracking-wider uppercase font-bold">CHAT</span>
+            </button>
+
+            <button id="doom-music-toggle" type="button" onclick="toggleDoomMusicPanel()" title="Abrir reproductor de música" aria-label="Abrir reproductor de música"
+                class="flex items-center gap-1.5 bg-zinc-950/90 hover:bg-emerald-950/90 text-white px-3 py-1.5 rounded-md border border-emerald-500/50 hover:border-emerald-400 transition-all clip-slanted shadow-xl">
+                <i id="doom-music-toggle-icon" class="fa-solid fa-music text-emerald-400 text-xs"></i>
+                <span class="font-teko text-sm tracking-wider uppercase font-bold">MÚSICA</span>
+            </button>
+            <div id="doom-audio-panel" class="doom-audio-player hidden" title="Reproductor de audio">
+                <audio id="doom-audio" preload="metadata" autoplay src="assets/audio.mp3"></audio>
+                <button type="button" id="doom-audio-play" onclick="toggleDoomAudio()" class="doom-audio-play" aria-label="Reproducir audio">
+                    <i id="doom-audio-icon" class="fa-solid fa-play"></i>
+                </button>
+                <div class="doom-audio-main">
+                    <div class="doom-audio-title">AUDIO <span>•</span> EXCXSAS - FEID</div>
+                    <input id="doom-audio-progress" class="doom-audio-progress" type="range" min="0" max="100" value="0" step="0.1" oninput="seekDoomAudio(this.value)" aria-label="Progreso del audio">
+                </div>
+                <button type="button" onclick="toggleDoomMute()" class="doom-audio-volume" aria-label="Silenciar audio">
+                    <i id="doom-audio-volume-icon" class="fa-solid fa-volume-high"></i>
+                </button>
+            </div>
+
+            <div class="flex items-center justify-center bg-zinc-950/90 text-zinc-300 px-2.5 py-0.5 rounded-md border border-emerald-500/30 shadow-lg clip-slanted pointer-events-auto" title="By Feid">
+                <span class="font-teko text-xs tracking-wider uppercase font-semibold">by feid</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SLIDE-OUT CHAT DRAWER (LEFT SIDE) -->
+    <div id="chat-panel" class="panel-drawer fixed bottom-20 left-6 z-40 w-80 md:w-96 bg-zinc-950/95 border border-emerald-500/50 rounded-xl backdrop-blur-2xl shadow-2xl flex flex-col -translate-x-[420px]">
+        <div class="flex items-center justify-between px-4 py-3 bg-emerald-950/60 rounded-t-xl border-b border-emerald-500/30">
+            <div class="flex items-center space-x-2.5">
+                <i class="fa-solid fa-comments text-emerald-400 text-lg"></i>
+                <span class="font-teko text-2xl tracking-wider font-bold text-white leading-none">// CHAT DE LOBBY</span>
+            </div>
+            <button onclick="toggleChat()" class="text-zinc-400 hover:text-white p-1">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+        </div>
+
+        <div id="chat-messages" class="h-64 p-4 overflow-y-auto space-y-3 text-sm">
+            <div class="text-xs text-emerald-500/80 text-center my-1 font-mono">Conectado al servidor de Latveria</div>
+            <div class="bg-zinc-900/80 p-2.5 rounded-lg border border-zinc-800">
+                <span class="font-bold text-amber-400 text-xs block mb-0.5">Miss Minutes:</span>
+                <span class="text-zinc-200">Señor Doom, el multiverso ha sido restaurado</span>
+            </div>
+            <div class="bg-zinc-900/80 p-2.5 rounded-lg border border-zinc-800">
+                <span class="font-bold text-emerald-400 text-xs block mb-0.5">Lugo:</span>
+                <span class="text-zinc-200">Mano, qué fue</span>
+            </div>
+        </div>
+
+        <form onsubmit="sendChatMessage(event)" class="p-3 border-t border-zinc-800 flex space-x-2 bg-zinc-950 rounded-b-xl">
+            <input id="chat-input" type="text" placeholder="Escribe un mensaje..." class="flex-1 bg-zinc-900 border border-zinc-700 rounded-lg px-3.5 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+            <button type="submit" class="bg-emerald-500 hover:bg-emerald-400 text-black font-bold px-4 py-2 rounded-lg transition-colors">
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>
+        </form>
+    </div>
+
+    <!-- SLIDE-OUT SQUAD / FRIENDS DRAWER (RIGHT SIDE) -->
+    <aside id="squad-panel" class="panel-drawer fixed top-0 right-0 z-40 h-full w-80 bg-zinc-950/95 border-l border-emerald-500/40 backdrop-blur-2xl p-6 flex flex-col justify-between translate-x-full shadow-2xl">
+        <div>
+            <div class="flex items-center justify-between pb-4 border-b border-zinc-800 mb-6">
+                <div class="flex items-center space-x-2.5">
+                    <i class="fa-solid fa-users text-emerald-400 text-2xl"></i>
+                    <span class="font-teko text-3xl font-bold tracking-wider text-white">// SOCIAL</span>
+                </div>
+                <button onclick="toggleSquadPanel()" class="text-zinc-400 hover:text-white p-1">
+                    <i class="fa-solid fa-xmark text-2xl"></i>
+                </button>
+            </div>
+
+            <!-- Social Friends: only thumbnails and names -->
+            <div>
+                <div class="grid grid-cols-2 gap-3">
+                    <a href="https://xat.me/iLuguinhoo" target="_blank" rel="noopener noreferrer" class="social-friend-card group flex flex-col items-center gap-2 bg-zinc-900/80 border border-emerald-500/20 hover:border-emerald-400/70 p-2.5 rounded-xl transition-all cursor-pointer">
+                        <img src="assets/friend_1.jpg" alt="Lugo" class="w-16 h-16 rounded-lg object-cover object-center border border-emerald-400/30 group-hover:border-emerald-300 shadow-lg transition-all">
+                        <div class="font-teko text-xl tracking-wider text-white group-hover:text-emerald-300">Lugo</div>
+                    </a>
+                    <a href="https://xat.me/Estela" target="_blank" rel="noopener noreferrer" class="social-friend-card group flex flex-col items-center gap-2 bg-zinc-900/80 border border-emerald-500/20 hover:border-emerald-400/70 p-2.5 rounded-xl transition-all cursor-pointer">
+                        <img src="assets/friend_2.jpg" alt="Estela" class="w-16 h-16 rounded-lg object-cover object-center border border-emerald-400/30 group-hover:border-emerald-300 shadow-lg transition-all">
+                        <div class="font-teko text-xl tracking-wider text-white group-hover:text-emerald-300">Estela</div>
+                    </a>
+                    <a href="https://xat.me/Honeymoon" target="_blank" rel="noopener noreferrer" class="social-friend-card group flex flex-col items-center gap-2 bg-zinc-900/80 border border-emerald-500/20 hover:border-emerald-400/70 p-2.5 rounded-xl transition-all cursor-pointer">
+                        <img src="assets/friend_3.jpg" alt="Mar" class="w-16 h-16 rounded-lg object-cover object-center border border-emerald-400/30 group-hover:border-emerald-300 shadow-lg transition-all">
+                        <div class="font-teko text-xl tracking-wider text-white group-hover:text-emerald-300">Mar</div>
+                    </a>
+                    <a href="https://xat.me/Nyxes" target="_blank" rel="noopener noreferrer" class="social-friend-card group flex flex-col items-center gap-2 bg-zinc-900/80 border border-emerald-500/20 hover:border-emerald-400/70 p-2.5 rounded-xl transition-all cursor-pointer">
+                        <img src="assets/friend_4.jpg" alt="Gabi" class="w-16 h-16 rounded-lg object-cover object-center border border-emerald-400/30 group-hover:border-emerald-300 shadow-lg transition-all">
+                        <div class="font-teko text-xl tracking-wider text-white group-hover:text-emerald-300">Gabi</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="pt-4 border-t border-zinc-800 text-center text-zinc-400 text-xs">
+            <span class="font-teko text-xs tracking-wider text-white">🎮 Presionar imagen para ver</span>
+        </div>
+    </aside>
+
+
+    <!-- HOLOGRAPHIC HEROES GALLERY -->
+    <section id="heroes-panel" class="fixed inset-0 z-[60] flex items-center justify-center p-3 pointer-events-none">
+        <div class="heroes-holo pointer-events-auto w-full max-w-4xl max-h-[76vh] rounded-2xl backdrop-blur-2xl overflow-hidden flex flex-col">
+            <div class="flex items-center justify-between px-4 py-2.5 border-b border-emerald-500/30">
+                <div>
+                    <div class="font-teko text-3xl md:text-4xl font-bold tracking-widest text-white">// HÉROES</div>
+                    <div class="text-[10px] uppercase tracking-[.35em] text-emerald-400">GALERÍA DE PERSONAJES</div>
+                </div>
+                <button onclick="toggleHeroesPanel()" class="text-zinc-400 hover:text-white p-2">
+                    <i class="fa-solid fa-xmark text-2xl"></i>
+                </button>
+            </div>
+            <div class="overflow-y-auto p-3">
+                <div class="heroes-grid">
+                    <div class="hero-card rounded-xl overflow-hidden">
+                        <img src="https://u.cubeupload.com/Eradicater/24.jpg" alt="Ace" loading="lazy">
+                        <div class="font-teko text-lg tracking-wider text-white text-center py-1.5">Ace</div>
+                    </div>
+                    <div class="hero-card rounded-xl overflow-hidden">
+                        <img src="https://u.cubeupload.com/Eradicater/23.jpg" alt="Law" loading="lazy">
+                        <div class="font-teko text-lg tracking-wider text-white text-center py-1.5">Law</div>
+                    </div>
+                    <div class="hero-card rounded-xl overflow-hidden">
+                        <img src="https://u.cubeupload.com/Eradicater/22.jpg" alt="Zoro" loading="lazy">
+                        <div class="font-teko text-lg tracking-wider text-white text-center py-1.5">Zoro</div>
+                    </div>
+                    <div class="hero-card rounded-xl overflow-hidden">
+                        <img src="https://u.cubeupload.com/Eradicater/21.jpg" alt="Charizard" loading="lazy">
+                        <div class="font-teko text-lg tracking-wider text-white text-center py-1.5">Charizard</div>
+                    </div>
+                    <div class="hero-card rounded-xl overflow-hidden">
+                        <img src="https://u.cubeupload.com/Eradicater/20.jpg" alt="Sasuke" loading="lazy">
+                        <div class="font-teko text-lg tracking-wider text-white text-center py-1.5">Sasuke</div>
+                    </div>
+                    <div class="hero-card rounded-xl overflow-hidden">
+                        <img src="https://u.cubeupload.com/Eradicater/19.jpg" alt="Naruto" loading="lazy">
+                        <div class="font-teko text-lg tracking-wider text-white text-center py-1.5">Naruto</div>
+                    </div>
+                    <div class="hero-card rounded-xl overflow-hidden">
+                        <img src="https://u.cubeupload.com/Eradicater/18.jpg" alt="Madara" loading="lazy">
+                        <div class="font-teko text-lg tracking-wider text-white text-center py-1.5">Madara</div>
+                    </div>
+                    <div class="hero-card rounded-xl overflow-hidden">
+                        <img src="https://u.cubeupload.com/Eradicater/17.jpg" alt="Itachi" loading="lazy">
+                        <div class="font-teko text-lg tracking-wider text-white text-center py-1.5">Itachi</div>
+                    </div>
+                    <div class="hero-card rounded-xl overflow-hidden">
+                        <img src="https://u.cubeupload.com/Eradicater/15.jpg" alt="Killua" loading="lazy">
+                        <div class="font-teko text-lg tracking-wider text-white text-center py-1.5">Killua</div>
+                    </div>
+                    <div class="hero-card rounded-xl overflow-hidden">
+                        <img src="https://u.cubeupload.com/Eradicater/16.jpg" alt="Ichigo" loading="lazy">
+                        <div class="font-teko text-lg tracking-wider text-white text-center py-1.5">Ichigo</div>
+                    </div>
+                    <div class="hero-card rounded-xl overflow-hidden">
+                        <img src="https://u.cubeupload.com/Eradicater/13.jpg" alt="Dr. Strange" loading="lazy">
+                        <div class="font-teko text-lg tracking-wider text-white text-center py-1.5">Dr. Strange</div>
+                    </div>
+                    <div class="hero-card rounded-xl overflow-hidden">
+                        <img src="https://u.cubeupload.com/Eradicater/f8114.jpg" alt="Eren" loading="lazy">
+                        <div class="font-teko text-lg tracking-wider text-white text-center py-1.5">Eren</div>
+                    </div>
+                    <div class="hero-card rounded-xl overflow-hidden">
+                        <img src="https://u.cubeupload.com/Eradicater/12.jpg" alt="Feitan" loading="lazy">
+                        <div class="font-teko text-lg tracking-wider text-white text-center py-1.5">Feitan</div>
+                    </div>
+                    <div class="hero-card rounded-xl overflow-hidden">
+                        <img src="https://u.cubeupload.com/Eradicater/11.jpg" alt="Urahara" loading="lazy">
+                        <div class="font-teko text-lg tracking-wider text-white text-center py-1.5">Urahara</div>
+                    </div>
+                    <div class="hero-card rounded-xl overflow-hidden">
+                        <img src="https://u.cubeupload.com/Eradicater/10.jpg" alt="Toji" loading="lazy">
+                        <div class="font-teko text-lg tracking-wider text-white text-center py-1.5">Toji</div>
+                    </div>
+                    <div class="hero-card rounded-xl overflow-hidden">
+                        <img src="https://u.cubeupload.com/Eradicater/09.jpg" alt="Claude" loading="lazy">
+                        <div class="font-teko text-lg tracking-wider text-white text-center py-1.5">Claude</div>
+                    </div>
+                    <div class="hero-card rounded-xl overflow-hidden">
+                        <img src="https://u.cubeupload.com/Eradicater/08.jpg" alt="Granger" loading="lazy">
+                        <div class="font-teko text-lg tracking-wider text-white text-center py-1.5">Granger</div>
+                    </div>
+                    <div class="hero-card rounded-xl overflow-hidden">
+                        <img src="https://u.cubeupload.com/Eradicater/07.jpg" alt="Itadori" loading="lazy">
+                        <div class="font-teko text-lg tracking-wider text-white text-center py-1.5">Itadori</div>
+                    </div>
+                    <div class="hero-card rounded-xl overflow-hidden">
+                        <img src="https://u.cubeupload.com/Eradicater/06.jpg" alt="Megumi" loading="lazy">
+                        <div class="font-teko text-lg tracking-wider text-white text-center py-1.5">Megumi</div>
+                    </div>
+                    <div class="hero-card rounded-xl overflow-hidden">
+                        <img src="https://u.cubeupload.com/Eradicater/04.jpg" alt="Levi" loading="lazy">
+                        <div class="font-teko text-lg tracking-wider text-white text-center py-1.5">Levi</div>
+                    </div>
+                    <div class="hero-card rounded-xl overflow-hidden">
+                        <img src="https://u.cubeupload.com/Eradicater/03.jpg" alt="Guts" loading="lazy">
+                        <div class="font-teko text-lg tracking-wider text-white text-center py-1.5">Guts</div>
+                    </div>
+                    <div class="hero-card rounded-xl overflow-hidden">
+                        <img src="https://u.cubeupload.com/Eradicater/01.jpg" alt="Aizen" loading="lazy">
+                        <div class="font-teko text-lg tracking-wider text-white text-center py-1.5">Aizen</div>
+                    </div>
+                    <div class="hero-card rounded-xl overflow-hidden">
+                        <img src="https://u.cubeupload.com/Eradicater/02.jpg" alt="Gojo" loading="lazy">
+                        <div class="font-teko text-lg tracking-wider text-white text-center py-1.5">Gojo</div>
+                    </div>
+                </div>
+                <div class="mt-4 text-center text-[10px] uppercase tracking-[.25em] text-zinc-500">Chrollo pendiente de imagen</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GENERAL DROPDOWN MENU -->
+    <div id="general-menu" class="panel-drawer fixed top-16 left-8 z-50 w-64 bg-zinc-950/95 border border-emerald-500/50 rounded-xl backdrop-blur-2xl p-4 shadow-2xl hidden opacity-0">
+        <div class="space-y-1.5">
+            <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-500/20 text-zinc-200 hover:text-emerald-300 transition-colors">
+                <i class="fa-solid fa-gear text-emerald-400"></i>
+                <span class="font-teko text-2xl">CONFIGURACIÓN</span>
+            </a>
+            <a href="#" onclick="toggleHeroesPanel(); return false;" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-500/20 text-zinc-200 hover:text-emerald-300 transition-colors">
+                <i class="fa-solid fa-shield-halved text-emerald-400"></i>
+                <span class="font-teko text-2xl">HÉROES DESBLOQUEADOS</span>
+            </a>
+            <a href="#" onclick="toggleSquadPanel(); return false;" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-emerald-500/20 text-zinc-200 hover:text-emerald-300 transition-colors">
+                <i class="fa-solid fa-share-nodes text-emerald-400"></i>
+                <span class="font-teko text-2xl">SOCIAL</span>
+            </a>
+            <div class="border-t border-zinc-800 my-2"></div>
+            <a href="#" onclick="returnToIntro(event)" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-red-500/20 text-red-400 transition-colors">
+                <i class="fa-solid fa-power-off"></i>
+                <span class="font-teko text-2xl">VOLVER AL INICIO</span>
+            </a>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+    <div id="bff-preview" class="bff-preview" aria-hidden="true" onclick="openBffProfile(event)" title="Abrir perfil de Estela">
+        <img src="assets/friend_2.jpg" alt="Estela">
+        <span>ESTELA</span>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
